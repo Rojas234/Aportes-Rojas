@@ -3,74 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aportes Rojas</title>
+    <title>Aportes Rojas | SA:MP Community</title>
     <style>
         :root {
-            --primario: #2c3e50;
-            --secundario: #3498db;
-            --fondo: #f8f9fa;
-            --texto: #333;
+            --color-principal: #f39c12; /* Naranja clásico estilo GTA */
+            --fondo-oscuro: #1a1a1a;
+            --tarjeta: #2c2c2c;
+            --texto: #e0e0e0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--fondo);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--fondo-oscuro);
             color: var(--texto);
             margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Encabezado Estilo Gaming */
+        header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.alphacoders.com/439/439401.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 250px;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 4px solid var(--color-principal);
         }
 
-        header {
-            background-color: var(--primario);
-            color: white;
-            padding: 2rem;
+        header h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            text-transform: uppercase;
+            text-shadow: 3px 3px #000;
+            color: var(--color-principal);
+        }
+
+        /* Barra de Navegación */
+        nav {
+            background: #111;
+            padding: 1rem;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        main {
-            flex: 1;
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .contenedor-aportes {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-top: 5px solid var(--secundario);
-        }
-
-        h1 { margin: 0; font-size: 2.5rem; }
-        p { line-height: 1.6; color: #666; }
-
-        .boton-accion {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 12px 24px;
-            background-color: var(--secundario);
+        nav a {
             color: white;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
+            margin: 0 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: color 0.3s;
         }
 
-        .boton-accion:hover {
-            background-color: #2980b9;
+        nav a:hover {
+            color: var(--color-principal);
         }
 
+        /* Grid de Contenido */
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--tarjeta);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--color-principal);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--color-principal);
+        }
+
+        .tag {
+            background: #444;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+
+        .btn-download {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 8px 16px;
+            background: var(--color-principal);
+            color: black;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        /* Footer */
         footer {
             text-align: center;
-            padding: 1rem;
-            font-size: 0.9rem;
-            color: #888;
+            padding: 2rem;
+            background: #111;
+            margin-top: 3rem;
+            border-top: 1px solid #333;
         }
     </style>
 </head>
@@ -78,26 +124,48 @@
 
     <header>
         <h1>Aportes Rojas</h1>
+        <p>Recursos, Scripts y Modding para SA:MP</p>
     </header>
 
-    <main>
-        <div class="contenedor-aportes">
-            <h2>Bienvenido a la plataforma</h2>
-            <p>Este es el espacio dedicado a la gestión y visualización de contenidos de <strong>Aportes Rojas</strong>. Aquí podrás encontrar información relevante y organizada.</p>
-            
-            <button class="boton-accion" onclick="mensaje()">Explorar contenido</button>
+    <nav>
+        <a href="#">Inicio</a>
+        <a href="#">CLEO Mods</a>
+        <a href="#">Sistemas Pawno</a>
+        <a href="#">Mapas</a>
+        <a href="#">Discord</a>
+    </nav>
+
+    <div class="container">
+        
+        <div class="card">
+            <h3>Sistema de Concesionario</h3>
+            <p>Un sistema avanzado en PAWN para la compra y venta de vehículos con guardado en MySQL.</p>
+            <span class="tag">PAWN</span> <span class="tag">MySQL</span>
+            <br>
+            <a href="#" class="btn-download">Ver Código</a>
         </div>
-    </main>
+
+        <div class="card">
+            <h3>CLEO: Anti-Crash v2.0</h3>
+            <p>Optimiza la carga de texturas y evita cierres inesperados en zonas de alto tráfico de mapeos.</p>
+            <span class="tag">CLEO</span> <span class="tag">Asi</span>
+            <br>
+            <a href="#" class="btn-download">Descargar</a>
+        </div>
+
+        <div class="card">
+            <h3>Estado del Servidor</h3>
+            <p><strong>IP:</strong> server.aportesrojas.com:7777</p>
+            <p><strong>Jugadores:</strong> 45 / 100</p>
+            <p><strong>Modo:</strong> Roleplay Latino</p>
+            <span class="tag" style="background: green;">Online</span>
+        </div>
+
+    </div>
 
     <footer>
-        &copy; 2026 Aportes Rojas - Todos los derechos reservados.
+        &copy; 2026 Aportes Rojas - Creado para la comunidad de SA:MP
     </footer>
-
-    <script>
-        function mensaje() {
-            alert('¡Bienvenido a Aportes Rojas! Pronto verás más contenido aquí.');
-        }
-    </script>
 
 </body>
 </html>
