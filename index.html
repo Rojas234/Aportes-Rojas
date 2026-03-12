@@ -91,4 +91,107 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            transition:
+            transition: 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: #ff6b81;
+            transform: scale(1.05);
+        }
+
+        .btn-link {
+            color: var(--gta-orange);
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Aportes Rojas - SA:MP</h1>
+</header>
+
+<div class="main-container">
+    
+    <section class="upload-section">
+        <input type="text" id="titulo" placeholder="Nombre del aporte">
+        <textarea id="desc" rows="2" placeholder="Descripción breve"></textarea>
+        <input type="text" id="link" placeholder="Link (Mega, Mediafire, etc)">
+        <button class="btn-post" onclick="crearAporte()">Publicar</button>
+    </section>
+
+    <div id="contenedor-lista">
+        </div>
+
+</div>
+
+<script>
+    // Al cargar la página, mostramos lo que esté guardado
+    window.onload = mostrarAportes;
+
+    function crearAporte() {
+        const t = document.getElementById('titulo').value;
+        const d = document.getElementById('desc').value;
+        const l = document.getElementById('link').value;
+
+        if(!t || !d || !l) return alert("Por favor, llena todos los campos.");
+
+        const nuevoAporte = {
+            id: Date.now(), // ID único para poder eliminarlo después
+            titulo: t,
+            desc: d,
+            link: l
+        };
+
+        // Guardar en la memoria del navegador
+        let datos = JSON.parse(localStorage.getItem('aportes_db')) || [];
+        datos.unshift(nuevoAporte);
+        localStorage.setItem('aportes_db', JSON.stringify(datos));
+
+        // Limpiar y actualizar
+        document.getElementById('titulo').value = "";
+        document.getElementById('desc').value = "";
+        document.getElementById('link').value = "";
+        mostrarAportes();
+    }
+
+    function mostrarAportes() {
+        const lista = document.getElementById('contenedor-lista');
+        let datos = JSON.parse(localStorage.getItem('aportes_db')) || [];
+        
+        lista.innerHTML = "";
+
+        datos.forEach(item => {
+            lista.innerHTML += `
+                <div class="aporte-item" id="item-${item.id}">
+                    <div class="aporte-info">
+                        <h3>${item.titulo}</h3>
+                        <p>${item.desc}</p>
+                    </div>
+                    <div>
+                        <a href="${item.link}" target="_blank" class="btn-link">LINK</a>
+                        <button class="btn-delete" onclick="borrarAporte(${item.id})">ELIMINAR</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function borrarAporte(id) {
+        if(confirm("¿Estás seguro de eliminar este aporte?")) {
+            let datos = JSON.parse(localStorage.getItem('aportes_db'));
+            // Filtramos la lista: dejamos todos menos el que tiene el ID que queremos borrar
+            datos = datos.filter(item => item.id !== id);
+            localStorage.setItem('aportes_db', JSON.stringify(datos));
+            
+            // Refrescar la vista
+            mostrarAportes();
+        }
+    }
+</script>
+
+</body>
+</html>
