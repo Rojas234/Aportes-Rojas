@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aportes Rojas | Panel Activo</title>
+    <title>Aportes Rojas | Administración</title>
     <style>
         :root {
             --gta-orange: #f39c12;
@@ -11,6 +11,7 @@
             --card-bg: #1e1e1e;
             --input-bg: #2a2a2a;
             --text: #ffffff;
+            --danger: #e74c3c;
         }
 
         body {
@@ -28,18 +29,9 @@
             border-bottom: 3px solid var(--gta-orange);
         }
 
-        header h1 {
-            margin: 0;
-            color: var(--gta-orange);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+        header h1 { margin: 0; color: var(--gta-orange); letter-spacing: 2px; text-transform: uppercase; }
 
-        .main-container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
-        }
+        .main-container { max-width: 800px; margin: 30px auto; padding: 20px; }
 
         /* Formulario */
         .upload-section {
@@ -76,8 +68,6 @@
             transition: 0.3s;
         }
 
-        .btn-post:hover { background: #e67e22; transform: scale(1.01); }
-
         /* Lista de Aportes */
         .aporte-item {
             background: var(--card-bg);
@@ -88,28 +78,36 @@
             justify-content: space-between;
             align-items: center;
             border-left: 5px solid var(--gta-orange);
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            position: relative;
         }
 
         .aporte-info h3 { margin: 0; color: white; }
         .aporte-info p { margin: 5px 0 0; color: #aaa; font-size: 0.9rem; }
 
+        .acciones { display: flex; gap: 10px; align-items: center; }
+
         .btn-dl {
             background: #333;
             color: var(--gta-orange);
-            padding: 10px 20px;
+            padding: 10px 15px;
             text-decoration: none;
             border-radius: 4px;
             font-weight: bold;
+            font-size: 0.8rem;
             border: 1px solid var(--gta-orange);
         }
 
-        .btn-dl:hover { background: var(--gta-orange); color: black; }
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-delete:hover { background: #c0392b; }
     </style>
 </head>
 <body>
@@ -123,64 +121,83 @@
     <section class="upload-section">
         <div class="form-group">
             <label>Nombre del aporte</label>
-            <input type="text" id="titulo" placeholder="Ej: Nuevo mapa de Interiores">
+            <input type="text" id="titulo" placeholder="Ej: Sistema de Inventario">
         </div>
         <div class="form-group">
             <label>Descripción</label>
-            <textarea id="desc" rows="2" placeholder="¿Qué incluye este mod?"></textarea>
+            <textarea id="desc" rows="2" placeholder="Detalles del mod..."></textarea>
         </div>
         <div class="form-group">
             <label>Link de descarga</label>
-            <input type="text" id="link" placeholder="https://mediafire.com/...">
+            <input type="text" id="link" placeholder="https://...">
         </div>
-        <button class="btn-post" onclick="publicar()">Publicar ahora</button>
+        <button class="btn-post" onclick="agregarAporte()">Publicar ahora</button>
     </section>
 
-    <h2 style="border-bottom: 2px solid #333; padding-bottom: 10px;">Aportes Recientes</h2>
-    <div id="lista-aportes">
-        <div class="aporte-item">
-            <div class="aporte-info">
-                <h3>Base Gamemode RP</h3>
-                <p>Una base limpia para empezar tu servidor de Roleplay.</p>
-            </div>
-            <a href="#" class="btn-dl">Descargar</a>
-        </div>
-    </div>
+    <h2 style="border-bottom: 2px solid #333; padding-bottom: 10px;">Gestión de Publicaciones</h2>
+    <div id="lista-aportes"></div>
 </div>
 
 <script>
-    function publicar() {
-        // Obtener valores de los campos
+    // 1. Cargar aportes guardados al abrir la página
+    document.addEventListener('DOMContentLoaded', mostrarAportes);
+
+    function agregarAporte() {
         const titulo = document.getElementById('titulo').value;
         const descripcion = document.getElementById('desc').value;
         const enlace = document.getElementById('link').value;
 
-        // Validar que no estén vacíos
-        if(titulo === "" || descripcion === "" || enlace === "") {
-            alert("Por favor, completa todos los campos.");
-            return;
-        }
+        if(!titulo || !descripcion || !enlace) return alert("Completa todo.");
 
-        // Crear el nuevo elemento de la lista
-        const lista = document.getElementById('lista-aportes');
-        const nuevoAporte = document.createElement('div');
-        nuevoAporte.className = 'aporte-item';
+        const aporte = {
+            id: Date.now(), // ID único basado en el tiempo
+            titulo,
+            descripcion,
+            enlace
+        };
 
-        nuevoAporte.innerHTML = `
-            <div class="aporte-info">
-                <h3>${titulo}</h3>
-                <p>${descripcion}</p>
-            </div>
-            <a href="${enlace}" target="_blank" class="btn-dl">Descargar</a>
-        `;
+        // Guardar en LocalStorage
+        let aportes = JSON.parse(localStorage.getItem('misAportes')) || [];
+        aportes.unshift(aporte);
+        localStorage.setItem('misAportes', JSON.stringify(aportes));
 
-        // Añadirlo al principio de la lista
-        lista.insertBefore(nuevoAporte, lista.firstChild);
-
-        // Limpiar el formulario
+        // Limpiar campos y refrescar lista
         document.getElementById('titulo').value = "";
         document.getElementById('desc').value = "";
         document.getElementById('link').value = "";
+        mostrarAportes();
+    }
+
+    function mostrarAportes() {
+        const lista = document.getElementById('lista-aportes');
+        const aportes = JSON.parse(localStorage.getItem('misAportes')) || [];
+        
+        lista.innerHTML = "";
+
+        aportes.forEach(a => {
+            lista.innerHTML += `
+                <div class="aporte-item">
+                    <div class="aporte-info">
+                        <h3>${a.titulo}</h3>
+                        <p>${a.descripcion}</p>
+                    </div>
+                    <div class="acciones">
+                        <a href="${a.enlace}" target="_blank" class="btn-dl">Link</a>
+                        <button class="btn-delete" onclick="eliminarAporte(${a.id})">Eliminar</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function eliminarAporte(id) {
+        if(confirm("¿Seguro que quieres borrar este aporte?")) {
+            let aportes = JSON.parse(localStorage.getItem('misAportes'));
+            // Filtrar la lista para quitar el que tiene ese ID
+            aportes = aportes.filter(a => a.id !== id);
+            localStorage.setItem('misAportes', JSON.stringify(aportes));
+            mostrarAportes();
+        }
     }
 </script>
 
