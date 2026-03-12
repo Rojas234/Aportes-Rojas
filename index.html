@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aportes Rojas | Panel de Carga</title>
+    <title>Aportes Rojas | Panel Activo</title>
     <style>
         :root {
             --gta-orange: #f39c12;
@@ -32,15 +32,16 @@
             margin: 0;
             color: var(--gta-orange);
             letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .main-container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 30px auto;
             padding: 20px;
         }
 
-        /* Sección del Formulario */
+        /* Formulario */
         .upload-section {
             background: var(--card-bg);
             padding: 25px;
@@ -49,25 +50,12 @@
             border: 1px solid #333;
         }
 
-        .upload-section h2 {
-            margin-top: 0;
-            color: var(--gta-orange);
-            font-size: 1.2rem;
-        }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--gta-orange); }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-        }
-
-        input, textarea, select {
+        input, textarea {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background: var(--input-bg);
             border: 1px solid #444;
             color: white;
@@ -79,60 +67,49 @@
             background: var(--gta-orange);
             color: black;
             border: none;
-            padding: 12px 20px;
+            padding: 15px;
             font-weight: bold;
             text-transform: uppercase;
             cursor: pointer;
             width: 100%;
             border-radius: 5px;
-            margin-top: 10px;
+            transition: 0.3s;
         }
 
-        .btn-post:hover {
-            background: #e67e22;
-        }
+        .btn-post:hover { background: #e67e22; transform: scale(1.01); }
 
         /* Lista de Aportes */
-        .feed-section h2 {
-            border-left: 4px solid var(--gta-orange);
-            padding-left: 10px;
-            margin-bottom: 20px;
-        }
-
         .aporte-item {
             background: var(--card-bg);
-            padding: 15px;
+            padding: 20px;
             border-radius: 8px;
             margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #333;
+            border-left: 5px solid var(--gta-orange);
+            animation: fadeIn 0.5s ease;
         }
 
-        .aporte-info h3 {
-            margin: 0;
-            color: var(--gta-orange);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .aporte-info p {
-            margin: 5px 0 0;
-            font-size: 0.85rem;
-            color: #bbb;
-        }
+        .aporte-info h3 { margin: 0; color: white; }
+        .aporte-info p { margin: 5px 0 0; color: #aaa; font-size: 0.9rem; }
 
         .btn-dl {
             background: #333;
-            color: white;
-            padding: 8px 15px;
+            color: var(--gta-orange);
+            padding: 10px 20px;
             text-decoration: none;
             border-radius: 4px;
-            font-size: 0.8rem;
+            font-weight: bold;
+            border: 1px solid var(--gta-orange);
         }
 
-        .btn-dl:hover {
-            background: #444;
-        }
+        .btn-dl:hover { background: var(--gta-orange); color: black; }
     </style>
 </head>
 <body>
@@ -144,43 +121,68 @@
 <div class="main-container">
     
     <section class="upload-section">
-        <h2>Subir Nuevo Aporte</h2>
         <div class="form-group">
-            <label>Título del Mod/Script</label>
-            <input type="text" placeholder="Ej: Velocímetro Realista v2">
+            <label>Nombre del aporte</label>
+            <input type="text" id="titulo" placeholder="Ej: Nuevo mapa de Interiores">
         </div>
         <div class="form-group">
-            <label>Descripción corta</label>
-            <textarea rows="2" placeholder="Explica brevemente qué hace tu aporte..."></textarea>
+            <label>Descripción</label>
+            <textarea id="desc" rows="2" placeholder="¿Qué incluye este mod?"></textarea>
         </div>
         <div class="form-group">
-            <label>Enlace de descarga (Mediafire/Mega/GitHub)</label>
-            <input type="url" placeholder="https://...">
+            <label>Link de descarga</label>
+            <input type="text" id="link" placeholder="https://mediafire.com/...">
         </div>
-        <button class="btn-post">Publicar Aporte</button>
+        <button class="btn-post" onclick="publicar()">Publicar ahora</button>
     </section>
 
-    <section class="feed-section">
-        <h2>Últimas Publicaciones</h2>
-        
+    <h2 style="border-bottom: 2px solid #333; padding-bottom: 10px;">Aportes Recientes</h2>
+    <div id="lista-aportes">
         <div class="aporte-item">
             <div class="aporte-info">
-                <h3>Pack de Skins LSPD</h3>
-                <p>Nuevas texturas en HD para el departamento de policía.</p>
+                <h3>Base Gamemode RP</h3>
+                <p>Una base limpia para empezar tu servidor de Roleplay.</p>
             </div>
             <a href="#" class="btn-dl">Descargar</a>
         </div>
-
-        <div class="aporte-item">
-            <div class="aporte-info">
-                <h3>Filtrado de Chat CLEO</h3>
-                <p>Oculta mensajes molestos del servidor automáticamente.</p>
-            </div>
-            <a href="#" class="btn-dl">Descargar</a>
-        </div>
-
-    </section>
+    </div>
 </div>
+
+<script>
+    function publicar() {
+        // Obtener valores de los campos
+        const titulo = document.getElementById('titulo').value;
+        const descripcion = document.getElementById('desc').value;
+        const enlace = document.getElementById('link').value;
+
+        // Validar que no estén vacíos
+        if(titulo === "" || descripcion === "" || enlace === "") {
+            alert("Por favor, completa todos los campos.");
+            return;
+        }
+
+        // Crear el nuevo elemento de la lista
+        const lista = document.getElementById('lista-aportes');
+        const nuevoAporte = document.createElement('div');
+        nuevoAporte.className = 'aporte-item';
+
+        nuevoAporte.innerHTML = `
+            <div class="aporte-info">
+                <h3>${titulo}</h3>
+                <p>${descripcion}</p>
+            </div>
+            <a href="${enlace}" target="_blank" class="btn-dl">Descargar</a>
+        `;
+
+        // Añadirlo al principio de la lista
+        lista.insertBefore(nuevoAporte, lista.firstChild);
+
+        // Limpiar el formulario
+        document.getElementById('titulo').value = "";
+        document.getElementById('desc').value = "";
+        document.getElementById('link').value = "";
+    }
+</script>
 
 </body>
 </html>
